@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "product-catalouge"
+version = "0.1.0"
+description = "Product catalouge service"
+authors = ["imirghania <imirghania@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11.6"
+fastapi = {extras = ["standard"], version = "^0.115.5"}
+beanie = "^1.27.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
