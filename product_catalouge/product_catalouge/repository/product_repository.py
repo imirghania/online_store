@@ -1,10 +1,12 @@
 from base_repository import Repository
+from models import ProductModel
 from models import Product
 
 
 class ProdutRepository(Repository):
-    def __init__(self):
-        super().__init__(Product)
+    async def __init__(self):
+        super().__init__(ProductModel)
     
-    def create_attribute(self, arg):
-        pass
+    async def create(self, payload):
+        record = await self.model(**payload)
+        return ProductModel(record.dict())

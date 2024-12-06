@@ -1,13 +1,15 @@
-from decimal import Decimal
-from typing import Optional
 from numbers import Number
+from typing import Annotated, Optional
+
 from beanie import Document, Indexed, Link
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from product_catalouge.schemas import Image, Media, Price, Stock
 
 
 class AttributeModel(Document):
     label: str
-    internal_code: str
+    internal_code: Annotated[str, Indexed(unique=True)]
     type: str
     is_required: bool
     is_numeric: bool
@@ -34,7 +36,7 @@ class AttributeModel(Document):
 
 
 class ProductTypeModel(Document):
-    name: str
+    name: Annotated[str, Indexed(unique=True)]
     taxes_class: str
     general_attributes: Optional[list[Link[AttributeModel]]] = Field(default_factory=list)
     variant_attributes: Optional[list[Link[AttributeModel]]] = Field(default_factory=list)
@@ -54,7 +56,8 @@ class ProductTypeModel(Document):
 
 
 class CategoryModel(Document):
-    name: str
+    name: Annotated[str, Indexed(unique=True)]
+    slug: Annotated[str, Indexed(unique=True)]
     description: str
     parent = Optional[Link["CategoryModel"]] = None
     sub_categories: Optional[list[Link["CategoryModel"]]] = None
@@ -77,15 +80,9 @@ class CategoryModel(Document):
         }
 
 
-class Image(BaseModel):
-    url: str
-    width: int
-    width: int
-    alt: Optional[str] = None
-
-
 class MediaObjectModel(Document):
     title: str
+    slug: Annotated[str, Indexed(unique=True)]
     image: Image
     thumbnail: Image
 
@@ -102,34 +99,13 @@ class MediaObjectModel(Document):
         }
 
 
-class MediaModel(Document):
-    items: Optional[list[Link[MediaObjectModel]]] = Field(default_factory=list)
-    main_media: Optional[Link[MediaObjectModel]] = None
-    thumbnail: Optional[Link[MediaObjectModel]] = None
-
-    class Settings:
-        name = "media"
-        use_state_management = True
-
-    def dict(self):
-        items = [item.dict() for item in items]
-        main_media = main_media.dict() if main_media else None
-        thumbnail = thumbnail.dict() if thumbnail else None
-        return {
-            "id": self.id,
-            "items": self.items, 
-            "main_media": self.main_media, 
-            "thumbnail": self.thumbnail, 
-        }
-
-
 class ProductModel(Document):
     name: str
-    slug: str
+    slug: Annotated[str, Indexed(unique=True)]
     product_type: Link[ProductTypeModel]
     categories: Optional[list[Link[CategoryModel]]] = Field(default_factory=list)
     channels: Optional[list[str]] = Field(default_factory=list)
-    media = Optional[MediaModel] = None
+    media = Optional[Media] = None
 
     class Settings:
         name = "products"
@@ -144,33 +120,17 @@ class ProductModel(Document):
             "product_type": self.product_type.dict(), 
             "categories": self.categories, 
             "channels": self.channels, 
-            "media": self.media.dict(), 
+            "media": self.media.dump_model(), 
         }
-
-class Stock(BaseModel):
-    iventory_id: str
-    quantity: Optional[Number] = 0
-
-
-class Price(BaseModel):
-    channel_id: str
-    currency: str
-    amount: Decimal
-    amount_discounted: Optional[Decimal] = None
-
-
-class AttributeSelection(BaseModel):
-    attribute_name: str
-    value: str
 
 
 class Variant(Document):
     name: str
-    slug: str
+    slug: Annotated[str, Indexed(unique=True)]
     sku: str
     product: Link[ProductModel]
     attributes_selection: dict
-    media = Optional[MediaModel] = None
+    media = Optional[Media] = None
     stock: Optional[list[Stock]] = Field(default_factory=list)
     price: list[Price]
 
@@ -186,7 +146,7 @@ class Variant(Document):
             "sku": self.sku, 
             "product": self.product.dict(), 
             "attributes_selection": self.attributes_selection, 
-            "media": self.media.dict(), 
+            "media": self.media.dump_model(), 
             "stock": self.stock.dump_model(),
             "price": self.price.dump_model(),
         }
