@@ -9,4 +9,4 @@ class ProductTypeRepository(Repository):
     
     async def create(self, payload: dict):
         record = await self.model(**payload)
-        return Category(record.dict())
+        return Category(**record.dict())

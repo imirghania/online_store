@@ -4,7 +4,17 @@ from typing import Annotated, Optional
 from beanie import Document, Indexed, Link
 from pydantic import Field
 
-from product_catalouge.schemas import Image, Media, Price, Stock
+from product_catalouge.schemas.main import Image, Media, Price, Stock
+
+
+__all__ = (
+        "AttributeModel", 
+        "ProductTypeModel", 
+        "CategoryModel", 
+        "MediaObjectModel",
+        "ProductModel",
+        "VariantModel",
+        )
 
 
 class AttributeModel(Document):
@@ -15,7 +25,7 @@ class AttributeModel(Document):
     is_numeric: bool
     measurement_type: str
     unit: str
-    value: str|list|Number
+    value: str|Number|list
 
     class Settings:
         name = "attributes"
@@ -124,7 +134,7 @@ class ProductModel(Document):
         }
 
 
-class Variant(Document):
+class VariantModel(Document):
     name: str
     slug: Annotated[str, Indexed(unique=True)]
     sku: str

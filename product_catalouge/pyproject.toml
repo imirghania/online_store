@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11.6"
 fastapi = {extras = ["standard"], version = "^0.115.5"}
 beanie = "^1.27.0"
+pydantic-settings = "^2.6.1"
 
 
 [build-system]

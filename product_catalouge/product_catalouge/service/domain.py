@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from numbers import Number
 from typing import Optional
 
-from product_catalouge.schemas import Image, Media, Price, Stock
+from product_catalouge.schemas.main import Image, Media, Price, Stock
 
 
 @dataclass

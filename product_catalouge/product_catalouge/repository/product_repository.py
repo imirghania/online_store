@@ -9,4 +9,4 @@ class ProdutRepository(Repository):
     
     async def create(self, payload):
         record = await self.model(**payload)
-        return ProductModel(record.dict())
+        return ProductModel(**record.dict())

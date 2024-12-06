@@ -9,4 +9,4 @@ class AttributeRepository(Repository):
     
     async def create(self, payload: dict):
         record = await self.model(**payload)
-        return Attribute(record.dict())
+        return Attribute(**record.dict())

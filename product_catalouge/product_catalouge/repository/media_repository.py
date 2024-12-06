@@ -9,4 +9,4 @@ class MediaObjectRepository(Repository):
     
     async def create(self, payload):
         record = await self.model(**payload)
-        return MediaObject(record.dict())
+        return MediaObject(**record.dict())
