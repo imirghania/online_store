@@ -1,5 +1,5 @@
-from base_repository import Repository
-from models import AttributeModel
+from .base_repository import Repository
+from models.attribute import AttributeModel
 from service.domain import Attribute
 
 

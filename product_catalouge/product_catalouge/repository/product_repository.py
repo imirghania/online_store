@@ -1,6 +1,5 @@
 from base_repository import Repository
 from models import ProductModel
-from models import Product
 
 
 class ProdutRepository(Repository):

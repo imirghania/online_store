@@ -1,6 +1,6 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-from models_loader import get_beanie_models
+from .models_loader import get_beanie_models
 
 
 async def init_db(mongo_uri:str, db_name:str):

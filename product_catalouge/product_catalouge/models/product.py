@@ -1,4 +1,5 @@
-from models.category import CategoryModel, Annotated, Optional, Document, Indexed, Link
+from models.category import (
+    CategoryModel, Annotated, Optional, Document, Indexed, Link)
 from models.product_type import ProductTypeModel, Field
 from schemas.main import Media
 

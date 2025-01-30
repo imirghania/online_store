@@ -1,4 +1,5 @@
 from product_catalouge.repository.base_repository import Repository
+from .domain import Attribute
 
 
 class AttributeService:
@@ -6,7 +7,7 @@ class AttributeService:
         self.repository = repository
     
     def get_by_id(self, id):
-        self.repository.get_by_id(id)
+        return self.repository.get_by_id(id)
 
     def create(self, payload):
-        self.repository.create(payload)
+        return self.repository.create(payload, Attribute)

@@ -1,4 +1,3 @@
-.# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -24,7 +23,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
 
 # Unit test / coverage reports
 htmlcov/

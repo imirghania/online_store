@@ -23,11 +23,11 @@ def get_modules(modules_dirname) -> Iterator[str]:
     """
     modules_dir_path = Path(APP_DIR/modules_dirname)
     print(f"[MODULES DIR PATH]: {modules_dir_path}")
-    module_parent_idx_end = len(APP_DIR.parts) - 1
+    module_parent_idx = len(APP_DIR.parts)
     modules = [f for f in list(modules_dir_path.rglob("*.py")) 
                 if f.stem != "__init__"]
     for filepath in modules:
-        yield (".".join(filepath.parts[module_parent_idx_end+1:])[0:-3])
+        yield (".".join(filepath.parts[module_parent_idx:])[0:-3])
 
 
 def dynamic_loader(modules_dirname, compare) -> list:
@@ -59,4 +59,3 @@ if __name__ == "__main__":
     print(f"[CWD]: {Path.cwd()}")
     sys.path.append(APP_DIR.parent)
     print(dynamic_loader("models", is_beanie_model))
-    # print(list(get_modules('models')))

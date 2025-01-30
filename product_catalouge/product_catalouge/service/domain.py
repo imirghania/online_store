@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from numbers import Number
 from typing import Optional
 
-from product_catalouge.schemas.main import Image, Media, Price, Stock
+from schemas.main import Media, Price, Stock
 
 
 @dataclass
@@ -49,7 +49,7 @@ class Category:
     id: str
     name: str
     description: str
-    parent = Optional["Category"] = None
+    parent: Optional["Category"] = None
     sub_categories: Optional[list["Category"]] = field(default_factory=list)
     
     def dict(self):
@@ -71,7 +71,7 @@ class Product:
     product_type: str
     categories: Optional[list[Category]] = field(default_factory=list)
     channels: Optional[list[str]] = field(default_factory=list)
-    media = Optional[Media] = None
+    media: Optional[Media] = None
 
     def dict(self):
         return {
@@ -92,9 +92,9 @@ class Variant:
     sku: str
     product: Product
     attributes_selection: dict
-    media = Optional[Media] = None
-    stock: Optional[list[Stock]] = field(default_factory=list)
     price: list[Price]
+    media: Optional[Media] = None
+    stock: Optional[list[Stock]] = field(default_factory=list)
 
     def dict(self):
         return {

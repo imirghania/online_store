@@ -1,5 +1,5 @@
 from base_repository import Repository
-from models import MediaObjectModel, MediaModel
+from models import MediaObjectModel
 from service.domain import MediaObject
 
 

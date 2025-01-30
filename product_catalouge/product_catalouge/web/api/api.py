@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from product_catalouge.core.config import settings
-from lib.models_loader import init_db
+from product_catalouge.lib.db_initializer import init_db
 from .routers import attribute
 
 

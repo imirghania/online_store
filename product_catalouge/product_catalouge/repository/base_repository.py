@@ -1,12 +1,22 @@
-from typing import Type
+from typing import Type, Protocol
 from beanie import Document, PydanticObjectId
+from .exceptions import DocumentNotFound
 
-from exceptions import DocumentNotFound
 
+class DomainClass(Protocol):
+    id: str
+    
+    def dict(self):
+        ...
+    
 
 class Repository:
     def __init__(self, model: Type[Document]):
         self.model = model
+    
+    async def create(self, payload: dict, domain_class: DomainClass):
+        record = await self.model(**payload)
+        return domain_class(**record.dict())
     
     async def get_by_id(self, id: PydanticObjectId):
         return await self.model.get(id)

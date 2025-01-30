@@ -1,12 +1,6 @@
 from contextlib import AbstractAsyncContextManager
-from typing import Callable, Type
-from beanie import Document
 from product_catalouge.repository.base_repository import Repository
-from exceptions import NotAssignedRepository
 
-NotAssignedRepositoryError = NotAssignedRepository(
-    'Select a repository first using the get_repository method.'
-    )
 
 
 class UnitOfWork(AbstractAsyncContextManager):
@@ -22,5 +16,5 @@ class UnitOfWork(AbstractAsyncContextManager):
     async def __aexit__(self, exc_type, exc_value, traceback):
         if exc_type:
             await self.rollback()
-        # else:
-        #     await self.commit()
+        else:
+            await self.commit()

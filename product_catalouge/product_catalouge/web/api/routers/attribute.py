@@ -19,6 +19,7 @@ async def get_one(id:str):
     with UnitOfWork(AttributeRepository) as uow:
         attribute_service = AttributeService(uow.repository)
         attribute = attribute_service.get_by_id(id)
+        return attribute.dict()
 
 
 @router.post("/attributes/", tags=["attributes"])

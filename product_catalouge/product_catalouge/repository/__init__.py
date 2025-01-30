@@ -1,2 +1,2 @@
-from attribute_repository import AttributeRepository
-from product_type_repository import ProductTypeRepository
+# from attribute_repository import AttributeRepository
+# from product_type_repository import ProductTypeRepository
