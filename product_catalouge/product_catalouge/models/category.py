@@ -9,7 +9,7 @@ class CategoryModel(Document):
     name: Annotated[str, Indexed(unique=True)]
     slug: Annotated[str, Indexed(unique=True)]
     description: str
-    parent = Optional[Link["CategoryModel"]] = None
+    parent: Optional[Link["CategoryModel"]] = None
     sub_categories: Optional[list[Link["CategoryModel"]]] = None
 
     class Settings:

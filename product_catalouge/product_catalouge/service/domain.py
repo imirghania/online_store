@@ -63,23 +63,6 @@ class Category:
 
 
 @dataclass
-class MediaObject:
-    """docstring for Category."""
-    id: str
-    title: str
-    image: Image
-    thumbnail: Image
-
-    def dict(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "image": self.image,
-            "thumbnail": self.thumbnail,
-        }
-
-
-@dataclass
 class Product:
     """docstring for Product."""
     id: str

@@ -9,7 +9,7 @@ from beanie import Document
 
 FILE_PATH = Path(__file__)
 
-APP_DIR = FILE_PATH.parent.parent
+APP_DIR = FILE_PATH.parent
 
 
 def is_beanie_model(item) -> bool:
@@ -17,25 +17,25 @@ def is_beanie_model(item) -> bool:
     return (isclass(item) and issubclass(item, Document) )
 
 
-def get_modules(modules_dir) -> Iterator[str]:
+def get_modules(modules_dirname) -> Iterator[str]:
     """Returns all .py modules in given file_dir as
     a generator of dot separated string values.
     """
-    modules_dir_path = Path(APP_DIR/modules_dir)
+    modules_dir_path = Path(APP_DIR/modules_dirname)
     print(f"[MODULES DIR PATH]: {modules_dir_path}")
     module_parent_idx_end = len(APP_DIR.parts) - 1
     modules = [f for f in list(modules_dir_path.rglob("*.py")) 
                 if f.stem != "__init__"]
     for filepath in modules:
-        yield (".".join(filepath.parts[module_parent_idx_end:])[0:-3])
+        yield (".".join(filepath.parts[module_parent_idx_end+1:])[0:-3])
 
 
-def dynamic_loader(modules_dir_path, compare) -> list:
+def dynamic_loader(modules_dirname, compare) -> list:
     """Iterates over all .py files in `module` directory,
     finding all classes that match `compare` function.
     """
     items = []
-    for mod in get_modules(modules_dir_path):
+    for mod in get_modules(modules_dirname):
         print(f"[MODULE PATH]: {mod}")
         print("*"*60, "\n")
         module = import_module(mod)
@@ -57,6 +57,6 @@ def get_beanie_models() -> list[str]:
 if __name__ == "__main__":
     print(f"[APP DIR PATH]: {APP_DIR}")
     print(f"[CWD]: {Path.cwd()}")
-    sys.path.append(APP_DIR)
+    sys.path.append(APP_DIR.parent)
     print(dynamic_loader("models", is_beanie_model))
-    # print(list(get_modules('product_catalouge/models')))
+    # print(list(get_modules('models')))

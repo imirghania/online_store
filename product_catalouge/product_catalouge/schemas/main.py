@@ -1,5 +1,4 @@
 from decimal import Decimal
-from numbers import Number
 from typing import Optional
 from pydantic import BaseModel, Field
 
@@ -25,7 +24,7 @@ class Media(BaseModel):
 
 class Stock(BaseModel):
     iventory_id: str
-    quantity: Optional[Number] = 0
+    quantity: Optional[int] = 0
 
 
 class Price(BaseModel):
@@ -35,6 +34,6 @@ class Price(BaseModel):
     amount_discounted: Optional[Decimal] = None
 
 
-class AttributeSelection(BaseModel):
-    attribute_name: str
-    value: str
+# class AttributeSelection(BaseModel):
+#     attribute_name: str
+#     value: str

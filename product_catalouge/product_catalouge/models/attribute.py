@@ -1,5 +1,4 @@
-from numbers import Number
-from typing import Annotated
+from typing import Annotated, Optional
 
 from beanie import Document, Indexed
 
@@ -14,8 +13,8 @@ class AttributeModel(Document):
     is_required: bool
     is_numeric: bool
     measurement_type: str
-    unit: str
-    value: str|Number|list
+    unit: Optional[str] = None
+    value: str|int|float|list
 
     class Settings:
         name = "attributes"

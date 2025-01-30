@@ -1,7 +1,7 @@
-from typing import Annotated, Optional
+from typing import Optional
 
-from beanie import Document, Indexed, Link
-from models import AttributeModel
+from beanie import Link
+from models.attribute import AttributeModel, Annotated, Document, Indexed
 from pydantic import Field
 
 __all__ = ("ProductTypeModel",)
