@@ -1,5 +1,5 @@
 from typing import Annotated, Optional
-
+from . import AttributeType, MeasurmentType
 from beanie import Document, Indexed
 
 
@@ -9,12 +9,12 @@ __all__ = ("AttributeModel",)
 class AttributeModel(Document):
     label: str
     internal_code: Annotated[str, Indexed(unique=True)]
-    type: str
+    type: AttributeType = AttributeType.STRING
     is_required: bool
-    is_numeric: bool
-    measurement_type: str
+    is_numeric: bool = False
+    measurement_type: Optional[MeasurmentType] = None
     unit: Optional[str] = None
-    value: str|int|float|list
+    options: Optional[list] = None
 
     class Settings:
         name = "attributes"
@@ -22,13 +22,13 @@ class AttributeModel(Document):
     
     def dict(self):
         return {
-            "id": self.id,
+            "id": str(self.id),
             "label": self.label, 
             "internal_code": self.internal_code, 
-            "type": self.type, 
+            "type": self.type.value, 
             "is_required": self.is_required, 
             "is_numeric": self.is_numeric, 
-            "measurement_type": self.measurement_type, 
+            "measurement_type": self.measurement_type.value, 
             "unit": self.unit, 
-            "value": self.value, 
+            "options": self.options, 
         }

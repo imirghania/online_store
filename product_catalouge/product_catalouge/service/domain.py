@@ -5,22 +5,27 @@ from typing import Optional
 from schemas.main import Media, Price, Stock
 
 
+
 @dataclass
 class Attribute:
     """docstring for Attribute."""
     id: str
     label: str
+    internal_code: str
     type: str
     is_required: bool
-    value: str | Number | list
+    is_numeric: bool | None
+    measurement_type: str
+    unit: str | None
+    options: list | None
     
     def dict(self):
         return {
-            "id": self.id,
+            "id": str(self.id),
             "label": self.label,
             "type": self.type,
             "is_required": self.is_required,
-            "value": self.value,
+            "value": self.options,
         }
 
 

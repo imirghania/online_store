@@ -1,12 +1,8 @@
 from .base_repository import Repository
 from models.attribute import AttributeModel
-from service.domain import Attribute
 
 
 class AttributeRepository(Repository):
+    model = AttributeModel
     def __init__(self):
-        super.__init__(AttributeModel)
-    
-    async def create(self, payload: dict):
-        record = await self.model(**payload)
-        return Attribute(**record.dict())
+        super().__init__(self.model)
