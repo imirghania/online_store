@@ -21,14 +21,4 @@ class AttributeModel(Document):
         use_state_management = True
     
     def dict(self):
-        return {
-            "id": str(self.id),
-            "label": self.label, 
-            "internal_code": self.internal_code, 
-            "type": self.type.value, 
-            "is_required": self.is_required, 
-            "is_numeric": self.is_numeric, 
-            "measurement_type": self.measurement_type.value, 
-            "unit": self.unit, 
-            "options": self.options, 
-        }
+        return self.model_dump()

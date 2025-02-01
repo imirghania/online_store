@@ -1,5 +1,4 @@
-from dataclasses import dataclass, field
-from numbers import Number
+from dataclasses import dataclass, asdict, field
 from typing import Optional
 
 from schemas.main import Media, Price, Stock
@@ -15,18 +14,25 @@ class Attribute:
     type: str
     is_required: bool
     is_numeric: bool | None
-    measurement_type: str
+    measurement_type: str | None
     unit: str | None
     options: list | None
     
     def dict(self):
-        return {
-            "id": str(self.id),
-            "label": self.label,
-            "type": self.type,
-            "is_required": self.is_required,
-            "value": self.options,
-        }
+        data = asdict(self)
+        data["id"] = str(self.id)
+        if self.is_numeric is False:
+            keys_to_remove = {"measurement_type", "unit"}
+            data = {
+                key: value for key, value in data.items() 
+                    if key not in keys_to_remove
+                }
+        
+        if self.type != "select":
+            data.pop("options", None)
+        
+        return data
+
 
 
 @dataclass

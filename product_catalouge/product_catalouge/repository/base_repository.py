@@ -1,4 +1,4 @@
-from typing import Type, Protocol
+from typing import Type
 from beanie import Document, PydanticObjectId
 from .exceptions import DocumentNotFound
 

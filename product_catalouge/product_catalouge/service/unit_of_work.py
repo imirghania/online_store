@@ -1,4 +1,3 @@
-from beanie import Document
 from contextlib import AbstractAsyncContextManager
 from repository.base_repository import Repository
 from . import Service
@@ -34,24 +33,3 @@ class UnitOfWork(AbstractAsyncContextManager):
     def track(self, *change):
         """Track a change made during the transaction."""
         self._changes + list(change)
-
-
-
-# class UnitOfWork(AbstractAsyncContextManager):
-#     def __init__(self, repository: Repository):
-#         self.repository = repository()
-
-#     async def commit(self):
-#         self.repository.model.save_changes()
-
-#     async def rollback(self):
-#         self.repository.model.rollback()
-    
-#     async def __aenter__(self):
-#         return self
-
-#     async def __aexit__(self, exc_type, exc_value, traceback):
-#         if exc_type:
-#             await self.rollback()
-#         else:
-#             await self.commit()
