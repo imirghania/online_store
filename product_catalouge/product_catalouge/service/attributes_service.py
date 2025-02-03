@@ -1,6 +1,7 @@
 from exceptions.database_exceptions import (
     DuplicateRecordError, RecordNotFound, InvalidInputError)
-from exceptions.http_exceptions import create_ItemNotFoundError_404, InvalidInput_400
+from exceptions.http_exceptions import (
+    create_ItemNotFoundError_404, create_ItemAlreadyExistsError_409, InvalidInput_400)
 from fastapi import HTTPException, Response, status
 from models.attribute import AttributeModel
 from product_catalouge.repository.base_repository import Repository
@@ -8,7 +9,7 @@ from .domain import Attribute
 
 
 AttributeNotFound_404 = create_ItemNotFoundError_404("Attribute")
-
+AttributeAlreadyExists_409 = create_ItemAlreadyExistsError_409("Attribute")
 
 
 class AttributeService:
@@ -36,8 +37,7 @@ class AttributeService:
             record = await self.repository.create(payload.dict())
         except DuplicateRecordError as e:
             print("[X][ERROR]: The Attribute name is already TAKEN")
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                                detail="The attribute name is already taken")
+            raise AttributeAlreadyExists_409
         return Attribute(**record.dict())
 
     async def delete_by_id(self, id):

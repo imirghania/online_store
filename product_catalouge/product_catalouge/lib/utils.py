@@ -1,24 +1,16 @@
 import re
 from unicodedata import normalize
+from typing import Callable
 
 
-def slugify(text):
+def slugify(text:str):
     """Convert a string into a slug."""
     text = normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
     text = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
     return text
 
-def generate_unique_slug(text, is_slug_unique):
-    """
-    Generate a unique slug for a given text.
-
-    Args:
-        text (str): The original text to convert to a slug.
-        is_slug_unique (callable): A function that takes a slug and returns True if it is unique.
-
-    Returns:
-        str: A unique slug.
-    """
+def generate_unique_slug(text:str, is_slug_unique:Callable):
+    """Generate a unique slug for a given text."""
     base_slug = slugify(text)
     slug = base_slug
     counter = 1

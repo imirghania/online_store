@@ -8,13 +8,13 @@ class AttributeRepository(Repository):
     def __init__(self):
         super().__init__(self.model)
 
-    async def create(self, payload):
+    async def create(self, payload:dict):
         processed_payload = self.process_payload(payload)
-        record = super().create(processed_payload)
+        record = await super().create(processed_payload)
         return record
     
     @staticmethod
-    def process_payload(payload):
+    def process_payload(payload:dict):
         data = copy(payload)
         
         if data["is_numeric"] is False:
@@ -23,7 +23,7 @@ class AttributeRepository(Repository):
                 data[key] = None 
         
         data["options"] = ( None 
-                        if data["type"].value != "select"       # data["type"] is an Enum
+                        if data["type"] != "select"
                         else data["options"]
                         )
         return data

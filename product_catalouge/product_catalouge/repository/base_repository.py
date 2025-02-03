@@ -11,9 +11,10 @@ class Repository:
     def __init__(self, model: Type[Document]):
         self.model = model
     
-    async def create(self, payload):
+    async def create(self, payload: dict):
         try:
             record = self.model(**payload)
+            await record.insert()
         except DuplicateKeyError as e:
             raise DuplicateRecordError
         print(f"[RECORD]: {record}")

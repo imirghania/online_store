@@ -1,7 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from repository.attribute_repository import AttributeRepository
 from product_catalouge.service.attributes_service import AttributeService
 from product_catalouge.service.unit_of_work import UnitOfWork
+from product_catalouge.schemas.attribute import AttributeSchema
 
 
 router = APIRouter()
@@ -24,7 +25,7 @@ async def get_one(id:str):
 
 
 @router.post("/attributes/", tags=["attributes"])
-async def create_attribute(payload: AttributeRepository.model):
+async def create_attribute(payload: AttributeSchema):
     async with UnitOfWork(AttributeService, AttributeRepository) as uow:
         attribute = await uow.service.create(payload)
         uow.track(attribute)
@@ -32,7 +33,8 @@ async def create_attribute(payload: AttributeRepository.model):
         return attribute.dict()
 
 
-@router.delete("/attributes/{id}", tags=["attributes"])
+@router.delete("/attributes/{id}", tags=["attributes"], 
+            status_code=status.HTTP_204_NO_CONTENT)
 async def delete_attribute(id:str):
     async with UnitOfWork(AttributeService, AttributeRepository) as uow:
         attribute = await uow.service.delete_by_id(id)

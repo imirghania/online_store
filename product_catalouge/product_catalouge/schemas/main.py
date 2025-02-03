@@ -32,8 +32,3 @@ class Price(BaseModel):
     currency: str
     amount: Decimal
     amount_discounted: Optional[Decimal] = None
-
-
-# class AttributeSelection(BaseModel):
-#     attribute_name: str
-#     value: str
