@@ -1,8 +1,7 @@
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from typing import Optional
 
 from schemas.main import Media, Price, Stock
-
 
 
 @dataclass

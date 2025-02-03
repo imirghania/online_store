@@ -1,7 +1,7 @@
 from fastapi import APIRouter
+from repository.attribute_repository import AttributeRepository
 from product_catalouge.service.attributes_service import AttributeService
 from product_catalouge.service.unit_of_work import UnitOfWork
-from repository.attribute_repository import AttributeRepository
 
 
 router = APIRouter()
@@ -30,3 +30,11 @@ async def create_attribute(payload: AttributeRepository.model):
         uow.track(attribute)
         uow.commit()
         return attribute.dict()
+
+
+@router.delete("/attributes/{id}", tags=["attributes"])
+async def delete_attribute(id:str):
+    async with UnitOfWork(AttributeService, AttributeRepository) as uow:
+        attribute = await uow.service.delete_by_id(id)
+        uow.track(attribute)
+        await uow.commit()

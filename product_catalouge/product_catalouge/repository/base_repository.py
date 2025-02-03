@@ -1,7 +1,10 @@
 from typing import Type
-from beanie import Document, PydanticObjectId
-from .exceptions import DocumentNotFound
 
+from beanie import Document, PydanticObjectId
+from exceptions.database_exceptions import (
+    DuplicateRecordError, RecordNotFound, InvalidInputError)
+from pymongo.errors import DuplicateKeyError
+from pydantic import ValidationError
 
 
 class Repository:
@@ -9,19 +12,26 @@ class Repository:
         self.model = model
     
     async def create(self, payload):
-        record = self.model(**payload)
+        try:
+            record = self.model(**payload)
+        except DuplicateKeyError as e:
+            raise DuplicateRecordError
         print(f"[RECORD]: {record}")
         return record
     
     async def get_by_id(self, id: PydanticObjectId):
-        return await self.model.get(id)
+        try:
+            return await self.model.get(id)
+        except ValidationError as e:
+            raise InvalidInputError
 
     async def get_all(self, filters: dict = None):
         filters = filters or {}
         return await self.model.find(filters).to_list()
 
     async def delete(self, id: PydanticObjectId):
-        document = self.get_by_id(id)
-        if not document:
-            raise DocumentNotFound
-        await document.delete()
+        try:
+            document = await self.get_by_id(id)
+            await document.delete()
+        except AttributeError as e:
+            raise RecordNotFound

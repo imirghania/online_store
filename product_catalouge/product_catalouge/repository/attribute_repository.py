@@ -1,6 +1,6 @@
 from copy import copy
-from .base_repository import Repository
 from models.attribute import AttributeModel
+from .base_repository import Repository
 
 
 class AttributeRepository(Repository):
@@ -10,8 +10,7 @@ class AttributeRepository(Repository):
 
     async def create(self, payload):
         processed_payload = self.process_payload(payload)
-        record = self.model(**processed_payload)
-        print(f"[RECORD]: {record}")
+        record = super().create(processed_payload)
         return record
     
     @staticmethod
@@ -27,5 +26,4 @@ class AttributeRepository(Repository):
                         if data["type"].value != "select"       # data["type"] is an Enum
                         else data["options"]
                         )
-        
         return data
