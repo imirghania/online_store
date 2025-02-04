@@ -1,7 +1,13 @@
 from dataclasses import asdict, dataclass, field
-from typing import Optional
+from typing import Optional, Protocol
 
 from schemas.main import Media, Price, Stock
+
+
+@dataclass
+class Domain(Protocol):
+    def dict(self):
+        ...
 
 
 @dataclass
