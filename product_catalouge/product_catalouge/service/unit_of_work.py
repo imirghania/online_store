@@ -12,13 +12,15 @@ class UnitOfWork(AbstractAsyncContextManager):
     async def commit(self):
         """Commit the changes by calling save_changes() on the service."""
         for change in self._changes:
-            await change.save_changes()
+            await change.save()
+            print(f"[UOW][DOCUMENT][COMMIT]: {change}")
         self._changes.clear()
 
     async def rollback(self):
         """Rollback the changes by calling rollback() on the service."""
         for change in self._changes:
             await change.rollback()
+            print(f"[UOW][DOCUMENT][ROLLBACK]: {change}")
         self._changes.clear()
 
     async def __aenter__(self):
@@ -30,6 +32,7 @@ class UnitOfWork(AbstractAsyncContextManager):
         else:
             await self.commit()
 
-    def track(self, *change):
+    def track(self, *changes):
         """Track a change made during the transaction."""
-        self._changes + list(change)
+        self._changes.extend(changes)
+        print(f"[UOW][TRACKED LIST]: {self._changes}")

@@ -1,49 +1,62 @@
-from exceptions.database_exceptions import (
-    DuplicateRecordError, RecordNotFound, InvalidInputError)
-from exceptions.http_exceptions import (
-    ItemNotFoundError_404, ItemAlreadyExistsError_409, InvalidInputError_400)
-from fastapi import Response, status
-from models.attribute import AttributeModel
+from typing import Any
+from exceptions.database_exceptions import (DuplicateRecordError,
+                                            InvalidInputError, RecordNotFound)
+from exceptions.http_exceptions import (InvalidInputError_400,
+                                        ItemAlreadyExistsError_409,
+                                        ItemNotFoundError_404)
+from schemas import BaseSchema
 from product_catalouge.repository.base_repository import Repository
-from .domain import Attribute, Domain
-
+from .domain import Domain
 
 
 class Service:
     
-    __model_label__ = "Item" 
+    model_label = "Item" 
     
     def __init__(self, repository: Repository, domain_class: Domain):
         self.repository = repository()
         self.DomainClass = domain_class
-    
-    async def get_all(self):
+
+    async def get_all(self) -> list[Domain]:
         items = await self.repository.get_all()
         items = [
             self.DomainClass(**attr.dict()) for attr in items
             ] if items else []
         return items
 
-    async def get_by_id(self, id):
+    async def get_one(self, id:str) -> Domain:
         try:
-            record = await self.repository.get_by_id(id)
+            record = await self.repository.get_one(id)
             if record is None:
-                raise ItemNotFoundError_404(self.__model_label__)
+                raise ItemNotFoundError_404(self.model_label)
             return self.DomainClass(**record.dict())
         except InvalidInputError as e:
-            raise InvalidInputError_400(self.__model_label__)
+            raise InvalidInputError_400(self.model_label)
 
-    async def create(self, payload: AttributeModel):
+    async def create(self, payload:BaseSchema) -> tuple[Domain, Any]:
         try:
             record = await self.repository.create(payload.dict())
+            return self.DomainClass(**record.dict()), record
         except DuplicateRecordError as e:
-            print(f"[X][ERROR]: The {self.__model_label__} already exists")
-            raise ItemAlreadyExistsError_409(self.__model_label__)
-        return Attribute(**record.dict())
+            print(f"[X][ERROR]: The {self.model_label} already exists")
+            raise ItemAlreadyExistsError_409(self.model_label)
 
-    async def delete_by_id(self, id):
+    async def update_one(self, id:str, payload:BaseSchema):
         try:
-            await self.repository.delete(id)
+            updated_record = await self.repository.update_one(id, payload.dict())
+            print(f"[UPATED RECORD]: {updated_record}")
+            if updated_record is None:
+                raise ItemNotFoundError_404(self.model_label)
+            return self.DomainClass(**updated_record.dict()), updated_record
         except RecordNotFound as e:
-            raise ItemNotFoundError_404(self.__model_label__)
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+            raise ItemNotFoundError_404(self.model_label)
+        except InvalidInputError as e:
+            raise InvalidInputError_400(self.model_label)
+        except DuplicateRecordError as e:
+            raise ItemAlreadyExistsError_409(self.model_label)
+
+    async def delete_one(self, id:str):
+        try:
+            await self.repository.delete_one(id)
+        except RecordNotFound as e:
+            raise ItemNotFoundError_404(self.model_label)
