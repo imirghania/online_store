@@ -41,7 +41,7 @@ class Service:
             print(f"[X][ERROR]: The {self.model_label} already exists")
             raise ItemAlreadyExistsError_409(self.model_label)
 
-    async def update_one(self, id:str, payload:BaseSchema):
+    async def update_one(self, id:str, payload:BaseSchema) -> tuple[Domain, Any]:
         try:
             updated_record = await self.repository.update_one(id, payload.dict())
             print(f"[UPATED RECORD]: {updated_record}")

@@ -11,7 +11,7 @@ class Repository:
     def __init__(self, model: Type[Document]):
         self.model = model
     
-    async def create(self, payload: dict):
+    async def create(self, payload:dict):
         try:
             record = self.model(**payload)
             await record.insert()
@@ -20,7 +20,7 @@ class Repository:
             print(f"[DUPLICATE-KEY ERROR]: {e.details}")
             raise DuplicateRecordError
 
-    async def get_one(self, id: PydanticObjectId):
+    async def get_one(self, id:PydanticObjectId):
         try:
             return await self.model.get(id)
         except ValidationError as e:
@@ -31,7 +31,7 @@ class Repository:
         filters = filters or {}
         return await self.model.find(filters).to_list()
 
-    async def update_one(self, id: PydanticObjectId, payload: dict[str, Any]):
+    async def update_one(self, id:PydanticObjectId, payload:dict[str, Any]):
         try:
             document = await self.get_one(id)
             print(f"[REPOSITORY][DOCUMENT][BASE]: {document}")
@@ -49,7 +49,7 @@ class Repository:
         except DuplicateKeyError as e:
             raise DuplicateRecordError
 
-    async def delete_one(self, id: PydanticObjectId):
+    async def delete_one(self, id:PydanticObjectId):
         try:
             document = await self.get_one(id)
             await document.delete()

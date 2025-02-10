@@ -10,12 +10,13 @@ async def lifespan(app: FastAPI):
     await init_db(settings.db_uri, settings.db_name)
     yield
 
-app = FastAPI(docs_url="/api/docs", 
-            openapi_url="/api", 
+app = FastAPI(title="Product Catalouge Service",
+            docs_url="/api/docs", 
+            openapi_url="/api/openapi", 
             lifespan=lifespan)
 
 app.include_router(attribute.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello Bigger Applications!"}
+    return {"message": "Hello, This is a product catalog service API"}
