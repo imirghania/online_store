@@ -56,12 +56,3 @@ def str_select_payload(request):
 def attrs(str_attr, num_attr, select_attr):
     return [str_attr, num_attr, select_attr]
 
-
-@pytest_asyncio.fixture()
-async def three_attrs(testdb, attrs):
-    inserted_attrs = []
-    for attr in attrs:
-        inserted_attr = await AttributeModel(**attr).insert()
-        inserted_attrs.append(inserted_attr)
-    yield inserted_attrs
-

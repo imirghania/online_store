@@ -23,6 +23,10 @@ class AttributeSchema(BaseModel):
         return self.model_dump()
 
 
+class AttributeSchemaOut(AttributeSchema):
+    id: str
+
+
 class AttributeUpdateSchema(AttributeSchema):
     label: Optional[str] = None
     internal_code: Optional[str] = None

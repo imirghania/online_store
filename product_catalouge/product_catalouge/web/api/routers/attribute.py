@@ -3,13 +3,13 @@ from repository.attribute_repository import AttributeRepository
 from product_catalouge.service.attributes_service import AttributeService
 from product_catalouge.service.unit_of_work import UnitOfWork
 from product_catalouge.schemas.attribute import (
-    AttributeSchema, AttributeUpdateSchema)
+    AttributeSchema, AttributeSchemaOut, AttributeUpdateSchema)
 
 
 router = APIRouter(prefix="/api/attributes", tags=["attributes"])
 
 
-@router.get("/", response_model=list[AttributeSchema])
+@router.get("/", response_model=list[AttributeSchemaOut])
 async def get_all():
     attribute_service = AttributeService(AttributeRepository)
     attributes = await attribute_service.get_all()
@@ -17,7 +17,7 @@ async def get_all():
     return [attr.dict() for attr in attributes]
 
 
-@router.get("/{id}", response_model=AttributeSchema)
+@router.get("/{id}", response_model=AttributeSchemaOut)
 async def get_one(id:str):
     attribute_service = AttributeService(AttributeRepository)
     attribute = await attribute_service.get_one(id)
@@ -25,7 +25,7 @@ async def get_one(id:str):
     return attribute.dict()
 
 
-@router.post("/", response_model=AttributeSchema, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=AttributeSchemaOut, status_code=status.HTTP_201_CREATED)
 async def create_attribute(payload:AttributeSchema):
     async with UnitOfWork(AttributeService, AttributeRepository) as uow:
         attribute, record = await uow.service.create(payload)
@@ -34,7 +34,7 @@ async def create_attribute(payload:AttributeSchema):
         return attribute.dict()
 
 
-@router.patch("/{id}", response_model=AttributeSchema)
+@router.patch("/{id}", response_model=AttributeSchemaOut)
 async def update_attribute(id:str, payload:AttributeUpdateSchema):
     async with UnitOfWork(AttributeService, AttributeRepository) as uow:
         updated_attribute, updated_record = await uow.service.update_one(id, payload)

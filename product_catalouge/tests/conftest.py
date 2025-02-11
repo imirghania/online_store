@@ -42,12 +42,12 @@ async def test_lifespan():
 
 @pytest.fixture(autouse=True)
 def test_app(test_lifespan):
-    app_ = FastAPI(
+    app = FastAPI(
         title="Product Catalogue Service (Test)",
         docs_url="/api/docs",
         openapi_url="/api/openapi",
         lifespan=test_lifespan,
     )
     for router in routers:
-        app_.include_router(router.router)
-    return app_
+        app.include_router(router.router)
+    return app
