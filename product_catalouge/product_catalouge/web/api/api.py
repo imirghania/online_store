@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from product_catalouge.core.config import settings
 from product_catalouge.lib.db_initializer import init_db
-from .routers import attribute
+from .routers import attribute, category
 
 
 @asynccontextmanager
@@ -16,6 +16,7 @@ app = FastAPI(title="Product Catalouge Service",
             lifespan=lifespan)
 
 app.include_router(attribute.router)
+app.include_router(category.router)
 
 @app.get("/")
 async def root():

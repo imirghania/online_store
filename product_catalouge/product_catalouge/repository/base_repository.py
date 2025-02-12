@@ -1,5 +1,4 @@
 from typing import Type, Any
-
 from beanie import Document, PydanticObjectId
 from exceptions.database_exceptions import (
     DuplicateRecordError, RecordNotFound, InvalidInputError)
@@ -22,14 +21,14 @@ class Repository:
 
     async def get_one(self, id:PydanticObjectId):
         try:
-            return await self.model.get(id)
+            return await self.model.get(id, fetch_links=True)
         except ValidationError as e:
             print(f"[INVALID-INPUT ERROR]: {e}")
             raise InvalidInputError
 
     async def get_all(self, filters: dict = None):
         filters = filters or {}
-        return await self.model.find(filters).to_list()
+        return await self.model.find(filters, nesting_depth=1, fetch_links=True).to_list()
 
     async def update_one(self, id:PydanticObjectId, payload:dict[str, Any]):
         try:

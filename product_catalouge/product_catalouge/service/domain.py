@@ -64,18 +64,15 @@ class Category:
     """docstring for Category."""
     id: str
     name: str
+    slug: str
     description: str
     parent: Optional["Category"] = None
-    sub_categories: Optional[list["Category"]] = field(default_factory=list)
+    sub_categories: Optional[list[str]] = field(default_factory=list)
     
     def dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "parent": self.parent.dict(),
-            "sub_categories": [category.dict() for category in self.sub_categories],
-        }
+        data = asdict(self)
+        data["id"] = str(self.id)
+        return data
 
 
 @dataclass
