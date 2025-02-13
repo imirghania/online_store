@@ -66,7 +66,7 @@ class Category:
     name: str
     slug: str
     description: str
-    parent: Optional["Category"] = None
+    parent: Optional[str] = None
     sub_categories: Optional[list[str]] = field(default_factory=list)
     
     def dict(self):

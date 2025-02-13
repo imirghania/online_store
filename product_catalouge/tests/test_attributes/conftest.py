@@ -1,6 +1,4 @@
 import pytest
-import pytest_asyncio
-from product_catalouge.models.attribute import AttributeModel
 
 
 

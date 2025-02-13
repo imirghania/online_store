@@ -3,7 +3,7 @@ from repository.category_repository import CategoryRepository
 from product_catalouge.service.categories_service import CategoryService
 from product_catalouge.service.unit_of_work import UnitOfWork
 from product_catalouge.schemas.category import (
-    CategorySchemaIn, CategorySchemaOut, CategorySchema)
+    CategorySchemaIn, CategorySchemaOut, CategoryUpdateSchema)
 
 
 router = APIRouter(prefix="/api/categories", tags=["categories"])
@@ -28,15 +28,17 @@ async def get_one(id:str):
 @router.post("/", response_model=CategorySchemaOut, status_code=status.HTTP_201_CREATED)
 async def create_category(payload:CategorySchemaIn):
     async with UnitOfWork(CategoryService, CategoryRepository) as uow:
-        category, record = await uow.service.create(payload)
+        category, record, parent = await uow.service.create(payload)
         print(f"[CATEGORY SERVICE][RECORD]: {record}")
         uow.track(record)
+        if parent is not None:
+            uow.track(parent)
         await uow.commit()
         return category.dict()
 
 
 @router.patch("/{id}", response_model=CategorySchemaOut)
-async def update_attribute(id:str, payload:CategorySchemaIn):
+async def update_category(id:str, payload:CategoryUpdateSchema):
     async with UnitOfWork(CategoryService, CategoryRepository) as uow:
         updated_category, updated_record = await uow.service.update_one(id, payload)
         print(f"[UPATED Attribute]: {updated_category}")
@@ -46,8 +48,9 @@ async def update_attribute(id:str, payload:CategorySchemaIn):
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_attribute(id:str):
+async def delete_category(id:str):
     async with UnitOfWork(CategoryService, CategoryRepository) as uow:
-        category = await uow.service.delete_one(id)
-        print(f"[DELETED][DOCUMENT]: {category}")
+        objects = await uow.service.delete_one(id)
+        uow.track(*objects)
+        await uow.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -21,28 +21,28 @@ class Repository:
 
     async def get_one(self, id:PydanticObjectId):
         try:
-            return await self.model.get(id, fetch_links=True)
+            return await self.model.get(id)
         except ValidationError as e:
             print(f"[INVALID-INPUT ERROR]: {e}")
             raise InvalidInputError
 
     async def get_all(self, filters: dict = None):
         filters = filters or {}
-        return await self.model.find(filters, nesting_depth=1, fetch_links=True).to_list()
+        return await self.model.find(filters, nesting_depth=1).to_list()
 
     async def update_one(self, id:PydanticObjectId, payload:dict[str, Any]):
         try:
-            document = await self.get_one(id)
-            print(f"[REPOSITORY][DOCUMENT][BASE]: {document}")
-            if not document:
+            record = await self.get_one(id)
+            print(f"[REPOSITORY][DOCUMENT][BASE]: {record}")
+            if not record:
                 raise RecordNotFound
             
             for key, value in payload.items():
-                setattr(document, key, value)
+                setattr(record, key, value)
             
-            print(f"[REPOSITORY][DOCUMENT][UPDATED]: {document}")
+            print(f"[REPOSITORY][DOCUMENT][UPDATED]: {record}")
             # await document.save()
-            return document
+            return record
         except ValidationError as e:
             raise InvalidInputError
         except DuplicateKeyError as e:

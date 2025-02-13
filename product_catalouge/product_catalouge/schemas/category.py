@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CategoryBaseSchema(BaseModel):
@@ -13,27 +13,21 @@ class CategoryBaseSchema(BaseModel):
 
 class CategorySchemaIn(CategoryBaseSchema):
     parent: Optional[str] = None
-    sub_categories: Optional[list[str]] = None
+    sub_categories: Optional[list[str]] = Field(default_factory=list)
 
 
-class CategorySchema(CategoryBaseSchema):
-    parent: Optional["CategorySchema"] = None
-    sub_categories: Optional[list[str]] = None
-
-
-class ParentCategory(BaseModel):
-    id: str
-    name: str
+class CategorySchema(CategorySchemaIn):
+    ...
 
 
 class CategorySchemaOut(CategorySchema):
     id: str
-    parent: Optional[ParentCategory] = None
 
 
-class CategoryUpdateSchema(CategorySchemaIn):
+class CategoryUpdateSchema(CategorySchema):
     name: Optional[str] = None
     slug: Optional[str] = None
+    sub_categories: Optional[list[str]] = None
     
     def dict(self):
         return self.model_dump(exclude_unset=True)

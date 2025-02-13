@@ -8,10 +8,10 @@ import pytest_asyncio
 from product_catalouge.core.config import settings
 from product_catalouge.lib.models_loader import get_beanie_models
 from product_catalouge.lib.db_initializer import init_db
-from product_catalouge.web.api.routers import attribute
+from product_catalouge.web.api.routers import attribute, category
 
 
-routers = [attribute]
+routers = [attribute, category]
 
 @pytest_asyncio.fixture(autouse=True)
 async def testdb():
