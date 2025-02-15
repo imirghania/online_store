@@ -32,6 +32,16 @@ def grand_child_category():
     return payload
 
 
+@pytest.fixture()
+def update_payload():
+    payload = {
+        "name": "Test Category",
+        "slug": "test-category",
+        "description": "The description of the Test Category",
+        }
+    return payload
+
+
 
 @pytest.fixture(params=["main_category", "child_category", "grand_child_category"])
 def category_payload(request):
