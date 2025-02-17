@@ -6,6 +6,7 @@ from exceptions.http_exceptions import (InvalidInputError_400,
                                         ItemNotFoundError_404)
 from schemas import BaseSchema
 from product_catalouge.repository.base_repository import Repository
+from product_catalouge.types import Model
 from .domain import Domain
 
 
@@ -16,6 +17,7 @@ class Service:
     def __init__(self, repository: Repository, domain_class: Domain):
         self.repository = repository()
         self.DomainClass = domain_class
+
 
     async def create(self, 
                     payload:BaseSchema, 
@@ -30,18 +32,15 @@ class Service:
             print(f"[X][ERROR]: The {self.model_label} already exists")
             raise ItemAlreadyExistsError_409(self.model_label)
 
+
     async def get_one(self, 
                     id:str, 
                     proccessor:Optional[Callable]=None) -> Domain:
-        try:
-            record = await self.repository.get_one(id)
-            if record is None:
-                raise ItemNotFoundError_404(self.model_label)
-            if proccessor:
-                record = proccessor(record)
-            return self.DomainClass(**record.dict())
-        except InvalidInputError as e:
-            raise InvalidInputError_400(self.model_label)
+        record = await self.get_record(id)
+        if proccessor:
+            record = proccessor(record)
+        return self.DomainClass(**record.dict())
+
 
     async def get_all(self, proccessor:Optional[Callable]=None) -> list[Domain]:
         items = await self.repository.get_all()
@@ -55,6 +54,7 @@ class Service:
                 self.DomainClass(**attr.dict()) for attr in items
                 ] if items else []
         return items
+
 
     async def update_one(self, 
                         id:str, 
@@ -81,5 +81,12 @@ class Service:
         except RecordNotFound as e:
             raise ItemNotFoundError_404(self.model_label)
 
-def format(self) -> Domain:
-    raise NotImplemented
+
+    async def get_record(self, id:str) -> Model:
+        try:
+            record = await self.repository.get_one(id)
+            if record is None:
+                raise ItemNotFoundError_404(self.model_label)
+            return record
+        except InvalidInputError as e:
+            raise InvalidInputError_400(self.model_label)

@@ -1,14 +1,15 @@
 from typing import Any
 from beanie import PydanticObjectId
 from schemas.category import CategorySchemaIn
-from product_catalouge.repository.base_repository import Repository
+# from product_catalouge.repository.base_repository import Repository
+from product_catalouge.repository.category_repository import CategoryRepository
 from .base_service import Service
 from .domain import Category
 
 
 class CategoryService(Service):
     model_label = "Category"
-    def __init__(self, repository: Repository):
+    def __init__(self, repository: CategoryRepository):
         super().__init__(repository, Category)
 
     async def create(self, payload: CategorySchemaIn) -> tuple[Category, Any]:

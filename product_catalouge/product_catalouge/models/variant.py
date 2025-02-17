@@ -1,6 +1,7 @@
 from models.product import (Annotated, Document, Field, Indexed, Link,
                             Optional, ProductModel)
-from schemas.main import Media, Price, Stock
+from schemas.main import Price, Stock
+from schemas.media import Media
 
 
 __all__ = ("VariantModel",)

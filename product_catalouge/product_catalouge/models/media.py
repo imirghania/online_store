@@ -1,6 +1,6 @@
 from typing import Annotated
 from beanie import Document, Indexed
-from schemas.main import Image
+from schemas.media import Image
 
 
 __all__ = ("MediaObjectModel",)

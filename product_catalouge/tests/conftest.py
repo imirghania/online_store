@@ -1,5 +1,4 @@
 from contextlib import asynccontextmanager
-import asyncio
 import pytest
 from beanie import init_beanie
 from fastapi import FastAPI
@@ -8,10 +7,10 @@ import pytest_asyncio
 from product_catalouge.core.config import settings
 from product_catalouge.lib.models_loader import get_beanie_models
 from product_catalouge.lib.db_initializer import init_db
-from product_catalouge.web.api.routers import attribute, category
+from product_catalouge.web.api.routers import attribute, category, product_type
 
 
-routers = [attribute, category]
+routers = [attribute, category, product_type]
 
 @pytest_asyncio.fixture(autouse=True)
 async def testdb():

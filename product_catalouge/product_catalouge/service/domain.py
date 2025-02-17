@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass, field
 from typing import Optional, Protocol
 
-from schemas.main import Media, Price, Stock
+from schemas.main import Price, Stock
 
 
 @dataclass
@@ -39,26 +39,6 @@ class Attribute:
         return data
 
 
-
-@dataclass
-class ProductType:
-    """docstring for ProductType."""
-    id: str
-    name: str
-    taxes_class: str
-    general_attributes: Optional[list[Attribute]] = field(default_factory=list)
-    variant_attributes: Optional[list[Attribute]] = field(default_factory=list)
-    
-    def dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "taxes_class": self.taxes_class,
-            "general_attributes": [atr.dict() for atr in self.general_attributes],
-            "variant_attributes": [atr.dict() for atr in self.variant_attributes],
-        }
-
-
 @dataclass
 class Category:
     """docstring for Category."""
@@ -76,48 +56,63 @@ class Category:
 
 
 @dataclass
-class Product:
-    """docstring for Product."""
+class ProductType:
+    """docstring for ProductType."""
     id: str
     name: str
-    slug: str
-    product_type: str
-    categories: Optional[list[Category]] = field(default_factory=list)
-    channels: Optional[list[str]] = field(default_factory=list)
-    media: Optional[Media] = None
-
+    taxes_class: str
+    general_attributes: Optional[list[str]] = field(default_factory=list)
+    variant_attributes: Optional[list[str]] = field(default_factory=list)
+    
     def dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "slug": self.slug,
-            "product_type": self.product_type.dict(),
-            "categories": [category.dict() for category in self.categories],
-            "media": self.media.model_dump(),
-        }
+        data = asdict(self)
+        data["id"] = str(self.id)
+        return data
 
 
-@dataclass
-class Variant:
-    """docstring for Variant."""
-    name: str
-    slug: str
-    sku: str
-    product: Product
-    attributes_selection: dict
-    price: list[Price]
-    media: Optional[Media] = None
-    stock: Optional[list[Stock]] = field(default_factory=list)
+# @dataclass
+# class Product:
+#     """docstring for Product."""
+#     id: str
+#     name: str
+#     slug: str
+#     product_type: str
+#     categories: Optional[list[Category]] = field(default_factory=list)
+#     channels: Optional[list[str]] = field(default_factory=list)
+#     media: Optional[Media] = None
 
-    def dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "slug": self.slug,
-            "sku": self.sku,
-            "product": self.product.dict(),
-            "attributes_selection": self.attributes_selection,
-            "media": self.media.model_dump(),
-            "stock": self.stock.model_dump(),
-            "price": self.price.model_dump(),
-        }
+#     def dict(self):
+#         return {
+#             "id": self.id,
+#             "name": self.name,
+#             "slug": self.slug,
+#             "product_type": self.product_type.dict(),
+#             "categories": [category.dict() for category in self.categories],
+#             "media": self.media.model_dump(),
+#         }
+
+
+# @dataclass
+# class Variant:
+#     """docstring for Variant."""
+#     name: str
+#     slug: str
+#     sku: str
+#     product: Product
+#     attributes_selection: dict
+#     price: list[Price]
+#     media: Optional[Media] = None
+#     stock: Optional[list[Stock]] = field(default_factory=list)
+
+#     def dict(self):
+#         return {
+#             "id": self.id,
+#             "name": self.name,
+#             "slug": self.slug,
+#             "sku": self.sku,
+#             "product": self.product.dict(),
+#             "attributes_selection": self.attributes_selection,
+#             "media": self.media.model_dump(),
+#             "stock": self.stock.model_dump(),
+#             "price": self.price.model_dump(),
+#         }

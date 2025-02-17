@@ -1,12 +1,8 @@
-from base_repository import Repository
-from models import ProductTypeModel
-from service.domain import ProductType
+from .base_repository import Repository
+from models.product_type import ProductTypeModel
 
 
 class ProductTypeRepository(Repository):
+    model = ProductTypeModel
     def __init__(self):
-        super.__init__(ProductTypeModel)
-    
-    async def create(self, payload: dict):
-        record = await self.model(**payload)
-        return ProductType(**record.dict())
+        super().__init__(ProductTypeModel)

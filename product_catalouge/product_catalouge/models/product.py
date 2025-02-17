@@ -1,8 +1,9 @@
 from models.category import CategoryModel
 from typing import Annotated, Optional
 from beanie import Document, Indexed, Link
-from models.product_type import ProductTypeModel, Field
-from schemas.main import Media
+from pydantic import Field
+from models.product_type import ProductTypeModel
+from schemas.media import Media
 
 
 __all__ = ("ProductModel",)
