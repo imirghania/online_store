@@ -3,7 +3,7 @@ from fastapi import APIRouter, status, Response
 from repository.product_type_repository import ProductTypeRepository
 from product_catalouge.service.product_type_service import ProductTypeService
 from product_catalouge.service.unit_of_work import UnitOfWork
-from product_catalouge.schemas.product import (
+from product_catalouge.schemas.product_type import (
     ProductTypeSchemaIn, ProductTypeSchemaOut, ProductTypeSchemaUpdate)
 
 

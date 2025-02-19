@@ -3,31 +3,29 @@ from pydantic import BaseModel, Field
 
 
 
-class ProductTypeSchema(BaseModel):
+class ProductSchema(BaseModel):
     name: str
-    taxes_class: str
-    general_attributes: Optional[list[str]] = Field(default_factory=list)
-    variant_attributes: Optional[list[str]] = Field(default_factory=list)
-
-    def model_post_init(self, __context) -> None:
-        self.general_attributes = list(set(self.general_attributes))
-        self.variant_attributes = list(set(self.variant_attributes))
-
+    product_type: str
+    categories: Optional[list[str]] = Field(default_factory=list)
+    channels: Optional[list[str]] = Field(default_factory=list)
+    main_media: Optional[str] = None
+    media_gallery: Optional[list[str]] = None
+    
     def dict(self):
         return self.model_dump()
 
 
-class ProductTypeSchemaIn(ProductTypeSchema):
+class ProductSchemaIn(ProductSchema):
     ...
 
 
-class ProductTypeSchemaOut(ProductTypeSchema):
+class ProductSchemaOut(ProductSchema):
     id: str
 
 
-class ProductTypeSchemaUpdate(ProductTypeSchema):
+class ProductSchemaUpdate(ProductSchema):
     name: Optional[str] = None
-    taxes_class: Optional[str] = None
-
+    product_type: Optional[str] = None
+    
     def dict(self):
         return self.model_dump(exclude_unset=True)

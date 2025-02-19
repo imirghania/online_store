@@ -1,21 +1,20 @@
 from models.product import (Annotated, Document, Field, Indexed, Link,
                             Optional, ProductModel)
-from schemas.main import Price, Stock
-from schemas.media import Media
+from schemas.media import MediaObject
 
 
 __all__ = ("VariantModel",)
 
 
 class VariantModel(Document):
-    name: str
+    name: Annotated[str, Indexed(unique=True)]
     slug: Annotated[str, Indexed(unique=True)]
     sku: str
     product: Link[ProductModel]
     attributes_selection: dict
-    media: Optional[Media] = None
-    stock: Optional[list[Stock]] = Field(default_factory=list)
-    price: list[Price]
+    media: Optional[list[MediaObject]] = None
+    # stock: Optional[list[Stock]] = Field(default_factory=list)
+    # price: list[Price]
 
     class Settings:
         name = "variants"

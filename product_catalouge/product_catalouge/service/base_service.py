@@ -62,7 +62,8 @@ class Service:
                         proccessor:Optional[Callable]=None) -> tuple[Domain, Any]:
         try:
             updated_record = await self.repository.update_one(id, payload.dict())
-            print(f"[UPATED RECORD]: {updated_record}")
+            print("="*100)
+            print(f"[UPATED RECORD][{self.model_label}]: {updated_record}")
             if updated_record is None:
                 raise ItemNotFoundError_404(self.model_label)
             if proccessor:
@@ -74,6 +75,7 @@ class Service:
             raise InvalidInputError_400(self.model_label)
         except DuplicateRecordError as e:
             raise ItemAlreadyExistsError_409(self.model_label)
+
 
     async def delete_one(self, id:str):
         try:

@@ -1,8 +1,6 @@
 from dataclasses import asdict, dataclass, field
 from typing import Optional, Protocol
 
-from schemas.main import Price, Stock
-
 
 @dataclass
 class Domain(Protocol):
@@ -67,6 +65,33 @@ class ProductType:
     def dict(self):
         data = asdict(self)
         data["id"] = str(self.id)
+        return data
+
+
+@dataclass
+class Image:
+    """docstring for Image."""
+    url: str
+    alt: str
+    width: int
+    height: int
+
+    # def dict(self):
+    #     return asdict(self)
+
+
+@dataclass
+class Media:
+    """docstring for Media."""
+    id: str
+    title: str
+    image: Image
+    thumbnail: Optional[Image] = None
+    
+    def dict(self):
+        data = asdict(self)
+        data["id"] = str(self.id)
+        # data["image"]["url"] = str(data["image"]["url"])
         return data
 
 

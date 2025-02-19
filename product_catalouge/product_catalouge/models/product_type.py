@@ -1,5 +1,5 @@
 from models.attribute import Annotated, Document, Indexed
-from schemas.product import ProductTypeSchema
+from product_catalouge.schemas.product_type import ProductTypeSchema
 
 __all__ = ("ProductTypeModel",)
 

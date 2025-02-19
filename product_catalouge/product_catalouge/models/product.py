@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 from beanie import Document, Indexed, Link
 from pydantic import Field
 from models.product_type import ProductTypeModel
-from schemas.media import Media
+from schemas.media import MediaObject
 
 
 __all__ = ("ProductModel",)
@@ -15,7 +15,7 @@ class ProductModel(Document):
     product_type: Link[ProductTypeModel]
     categories: Optional[list[Link[CategoryModel]]] = Field(default_factory=list)
     channels: Optional[list[str]] = Field(default_factory=list)
-    media: Optional[Media] = None
+    media: Optional[MediaObject] = None
 
     class Settings:
         name = "products"
