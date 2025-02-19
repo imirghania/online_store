@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from product_catalouge.core.config import settings
 from product_catalouge.lib.db_initializer import init_db
-from .routers import attribute, category, product_type, media
+from .routers import attribute, category, product_type, media, product
 
 
 @asynccontextmanager
@@ -19,6 +19,7 @@ app.include_router(attribute.router)
 app.include_router(category.router)
 app.include_router(product_type.router)
 app.include_router(media.router)
+app.include_router(product.router)
 
 @app.get("/")
 async def root():

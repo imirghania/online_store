@@ -1,8 +1,8 @@
-from base_repository import Repository
-from models import ProductModel
+from .base_repository import Repository
+from models.product import ProductModel
 
 
-class ProdutRepository(Repository):
+class ProductRepository(Repository):
     model = ProductModel
-    async def __init__(self):
+    def __init__(self):
         super().__init__(self.model)

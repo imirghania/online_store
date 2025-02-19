@@ -14,6 +14,7 @@ class MediaObjectRepository(Repository):
     def __init__(self):
         super().__init__(self.model)
 
+
     async def update_one(self, id:PydanticObjectId, payload:dict[str, Any]):
         try:
             media = await self.get_one(id)
@@ -21,15 +22,18 @@ class MediaObjectRepository(Repository):
             print(f"[MEDIA REPOSITORY][DOCUMENT][BASE]: {media}")
             if not media:
                 raise RecordNotFound
-            
+
             if "media" in payload:
                 payload["image"] = media.image.model_copy(**payload["image"])
+
+            if "thumbnail" in payload:
+                payload["thumbnail"] = media.thumbnail.model_copy(**payload["thumbnail"])
             
             for key, value in payload.items():
                 setattr(media, key, value)
             print("="*100)
             print(f"[MEDIA REPOSITORY][DOCUMENT][UPDATED]: {media}")
-            # await document.save()
+            
             return media
         except ValidationError as e:
             raise InvalidInputError

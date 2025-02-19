@@ -9,9 +9,18 @@ class Domain(Protocol):
 
 
 @dataclass
-class Attribute:
-    """docstring for Attribute."""
+class BaseDomain:
     id: str
+    
+    def dict(self):
+        data = asdict(self)
+        data["id"] = str(self.id)
+        return data
+
+
+@dataclass
+class Attribute(BaseDomain):
+    """docstring for Attribute."""
     label: str
     internal_code: str
     type: str
@@ -22,8 +31,7 @@ class Attribute:
     options: list | None
     
     def dict(self):
-        data = asdict(self)
-        data["id"] = str(self.id)
+        data = super().dict()
         if self.is_numeric is False:
             keys_to_remove = {"measurement_type", "unit"}
             data = {
@@ -38,34 +46,22 @@ class Attribute:
 
 
 @dataclass
-class Category:
+class Category(BaseDomain):
     """docstring for Category."""
-    id: str
     name: str
     slug: str
     description: str
     parent: Optional[str] = None
     sub_categories: Optional[list[str]] = field(default_factory=list)
-    
-    def dict(self):
-        data = asdict(self)
-        data["id"] = str(self.id)
-        return data
 
 
 @dataclass
-class ProductType:
+class ProductType(BaseDomain):
     """docstring for ProductType."""
-    id: str
     name: str
     taxes_class: str
     general_attributes: Optional[list[str]] = field(default_factory=list)
     variant_attributes: Optional[list[str]] = field(default_factory=list)
-    
-    def dict(self):
-        data = asdict(self)
-        data["id"] = str(self.id)
-        return data
 
 
 @dataclass
@@ -76,45 +72,24 @@ class Image:
     width: int
     height: int
 
-    # def dict(self):
-    #     return asdict(self)
-
 
 @dataclass
-class Media:
+class Media(BaseDomain):
     """docstring for Media."""
-    id: str
     title: str
     image: Image
     thumbnail: Optional[Image] = None
-    
-    def dict(self):
-        data = asdict(self)
-        data["id"] = str(self.id)
-        # data["image"]["url"] = str(data["image"]["url"])
-        return data
 
 
-# @dataclass
-# class Product:
-#     """docstring for Product."""
-#     id: str
-#     name: str
-#     slug: str
-#     product_type: str
-#     categories: Optional[list[Category]] = field(default_factory=list)
-#     channels: Optional[list[str]] = field(default_factory=list)
-#     media: Optional[Media] = None
-
-#     def dict(self):
-#         return {
-#             "id": self.id,
-#             "name": self.name,
-#             "slug": self.slug,
-#             "product_type": self.product_type.dict(),
-#             "categories": [category.dict() for category in self.categories],
-#             "media": self.media.model_dump(),
-#         }
+@dataclass
+class Product(BaseDomain):
+    """docstring for Product."""
+    name: str
+    product_type: str
+    categories: Optional[list[str]] = field(default_factory=list)
+    channels: Optional[list[str]] = field(default_factory=list)
+    main_media: Optional[str] = None
+    media_gallery: Optional[list[str]] = None
 
 
 # @dataclass

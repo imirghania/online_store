@@ -1,7 +1,7 @@
-from models.product import (Annotated, Document, Field, Indexed, Link,
-                            Optional, ProductModel)
+from typing import Optional
+from beanie import Document, Indexed
+from models.product import Annotated, Document
 from schemas.media import MediaObject
-
 
 __all__ = ("VariantModel",)
 
@@ -10,7 +10,7 @@ class VariantModel(Document):
     name: Annotated[str, Indexed(unique=True)]
     slug: Annotated[str, Indexed(unique=True)]
     sku: str
-    product: Link[ProductModel]
+    # product: Link[ProductModel]
     attributes_selection: dict
     media: Optional[list[MediaObject]] = None
     # stock: Optional[list[Stock]] = Field(default_factory=list)
