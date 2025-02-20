@@ -4,7 +4,8 @@ from repository.product_type_repository import ProductTypeRepository
 from product_catalouge.service.product_type_service import ProductTypeService
 from product_catalouge.service.unit_of_work import UnitOfWork
 from product_catalouge.schemas.product_type import (
-    ProductTypeSchemaIn, ProductTypeSchemaOut, ProductTypeSchemaUpdate)
+    ProductTypeSchemaIn, ProductTypeSchemaOut, ProductTypeSchemaUpdate, 
+    ProductTypeSchemaOutDetailed)
 
 
 router = APIRouter(prefix="/api/product-types", tags=["Product Types"])
@@ -23,6 +24,14 @@ async def get_all():
 async def get_one(id:str):
     product_type_service = ProductTypeService(ProductTypeRepository)
     product_type = await product_type_service.get_one(id)
+    print(f"[PRODUCT TYPE][RECORD]: {product_type.dict()}")
+    return product_type.dict()
+
+
+@router.get("/{id}/verbose", response_model=ProductTypeSchemaOutDetailed)
+async def get_one_with_details(id:str):
+    product_type_service = ProductTypeService(ProductTypeRepository)
+    product_type = await product_type_service.get_one_verbose(id)
     print(f"[PRODUCT TYPE][RECORD]: {product_type.dict()}")
     return product_type.dict()
 

@@ -1,5 +1,8 @@
 from typing import Optional
 from pydantic import BaseModel, Field
+from .product_type import ProductTypeSchemaOutDetailed
+from .media import MediaObjectIn
+from .category import CategorySchemaOut
 
 
 
@@ -34,3 +37,13 @@ class ProductSchemaUpdate(ProductSchema):
     
     def dict(self):
         return self.model_dump(exclude_unset=True)
+
+
+class ProductSchemaOutDetailed(ProductSchemaOut):
+    product_type: ProductTypeSchemaOutDetailed
+    categories: Optional[list[CategorySchemaOut]] = Field(default_factory=list)
+    main_media: Optional[MediaObjectIn] = None
+    media_gallery: Optional[list[MediaObjectIn]] = Field(default_factory=list)
+    
+    def model_post_init(self, __context) -> None:
+        ...

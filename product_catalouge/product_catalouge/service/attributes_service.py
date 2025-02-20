@@ -7,3 +7,6 @@ class AttributeService(Service):
     __model_label__ = "Attribute"
     def __init__(self, repository: AttributeRepository):
         super().__init__(repository, Attribute)
+
+
+attribute_service = AttributeService(AttributeRepository)

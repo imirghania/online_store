@@ -23,8 +23,13 @@ class AttributeSchema(BaseModel):
         return self.model_dump()
 
 
+class AttributeSchemaIn(AttributeSchema):
+    ...
+
+
 class AttributeSchemaOut(AttributeSchema):
     id: str
+    internal_code: str = Field(exclude=True)
 
 
 class AttributeUpdateSchema(AttributeSchema):
@@ -32,7 +37,7 @@ class AttributeUpdateSchema(AttributeSchema):
     internal_code: Optional[str] = None
     type: Optional[AttributeType] = None 
     is_required: Optional[bool] = None
-    # is_numeric: Optional[bool] = None
+    is_numeric: Optional[bool] = None
     
     def dict(self):
         return self.model_dump(exclude_unset=True)

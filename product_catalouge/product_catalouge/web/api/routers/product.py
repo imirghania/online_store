@@ -4,7 +4,7 @@ from repository.product_repository import ProductRepository
 from product_catalouge.service.product_service import ProductService
 from product_catalouge.service.unit_of_work import UnitOfWork
 from product_catalouge.schemas.product import (
-    ProductSchemaIn, ProductSchemaOut, ProductSchemaUpdate)
+    ProductSchemaIn, ProductSchemaOut, ProductSchemaUpdate, ProductSchemaOutDetailed)
 
 
 router = APIRouter(prefix="/api/product", tags=["Product"])
@@ -23,6 +23,14 @@ async def get_all():
 async def get_one(id:str):
     product_service = ProductService(ProductRepository)
     product = await product_service.get_one(id)
+    print(f"[PRODUCT][RECORD]: {product.dict()}")
+    return product.dict()
+
+
+@router.get("/{id}/verbose", response_model=ProductSchemaOutDetailed)
+async def get_one_verbose(id:str):
+    product_service = ProductService(ProductRepository)
+    product = await product_service.get_one_verbose(id)
     print(f"[PRODUCT][RECORD]: {product.dict()}")
     return product.dict()
 

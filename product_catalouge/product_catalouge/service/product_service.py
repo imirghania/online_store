@@ -1,5 +1,8 @@
 from product_catalouge.repository.product_repository import(
     ProductRepository)
+from product_catalouge.service.product_type_service import product_type_service
+from product_catalouge.service.media_service import media_service
+from product_catalouge.service.categories_service import categories_service
 from exceptions.database_exceptions import InvalidInputError
 from beanie import PydanticObjectId
 from typing import Literal
@@ -12,6 +15,28 @@ class ProductService(Service):
     model_label = "Product"
     def __init__(self, repository: ProductRepository):
         super().__init__(repository, Product)
+        self.product_type_service = product_type_service
+        self.media_service = media_service
+        self.categories_service = categories_service
+    
+    
+    async def get_one_verbose(self, id: PydanticObjectId):
+        product = await self.get_one(id)
+        product.product_type = (await self.product_type_service.get_one_verbose(
+            product.product_type
+        )).dict()
+        product.main_media = (await self.media_service.get_one(
+            product.main_media
+        )).dict()
+        product.media_gallery = [
+            (await self.media_service.get_one(media_id)).dict() 
+            for media_id in product.media_gallery
+            ]
+        product.categories = [
+            (await self.categories_service.get_one(cat_id)).dict() 
+            for cat_id in product.categories
+            ]
+        return product
     
     
     async def add_item(self, 

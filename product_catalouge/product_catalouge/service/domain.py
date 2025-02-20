@@ -69,7 +69,7 @@ class ProductType(BaseDomain):
 class Image:
     """docstring for Image."""
     url: str
-    alt: str
+    alt: Optional[str]
     width: int
     height: int
 

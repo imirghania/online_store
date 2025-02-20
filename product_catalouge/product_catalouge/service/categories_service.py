@@ -46,3 +46,7 @@ class CategoryService(Service):
                 objects_to_track.append(sub)
         await category.delete()
         return objects_to_track
+
+
+
+categories_service = CategoryService(CategoryRepository)

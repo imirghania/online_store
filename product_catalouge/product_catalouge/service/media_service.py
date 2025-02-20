@@ -9,3 +9,6 @@ class MediaService(Service):
     model_label = "Media"
     def __init__(self, repository: MediaObjectRepository):
         super().__init__(repository, Media)
+
+
+media_service = MediaService(MediaObjectRepository)

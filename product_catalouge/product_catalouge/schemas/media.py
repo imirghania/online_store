@@ -25,7 +25,7 @@ class MediaObject(BaseModel):
     thumbnail: Optional[Image] = None
 
     def model_post_init(self, __context) -> None:
-        if (self.thumbnail is not None) and self.image.alt is not None:
+        if (self.thumbnail is not None) and (self.image.alt is not None):
             self.thumbnail.alt = (self.image.alt + " [thumbnail]"
                                 if self.image.alt is not None
                                 else "[thumbnail]")
@@ -45,11 +45,11 @@ class MediaObjectUpdate(MediaObject):
     title: Optional[str] = None
     image: Optional[ImageUpdate] = None
     thumbnail: Optional[ImageUpdate] = None
-
+    
     def model_post_init(self, __context) -> None:
-        if self.image is not None and self.thumbnail is not None:
+        if (self.image is not None) and (self.thumbnail is not None):
             self.thumbnail.alt = self.image.alt + " [thumbnail]"
-
+    
     def dict(self):
         return self.model_dump(exclude_unset=True)
 
