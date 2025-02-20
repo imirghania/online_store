@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/attributes", tags=["attributes"])
 async def get_all():
     attribute_service = AttributeService(AttributeRepository)
     attributes = await attribute_service.get_all()
-    print(f"[ATTRIBUTEs]: {attributes}")
+    print(f"[ATTRIBUTES]: {attributes}")
     return [attr.dict() for attr in attributes]
 
 

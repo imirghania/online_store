@@ -12,19 +12,19 @@ router = APIRouter(prefix="/api/product", tags=["Product"])
 
 @router.get("/", response_model=list[ProductSchemaOut])
 async def get_all():
-    product_type_service = ProductService(ProductRepository)
-    product_types = await product_type_service.get_all()
+    product_service = ProductService(ProductRepository)
+    products = await product_service.get_all()
     print("="*100)
-    print(f"[PRODUCT]: {product_types}")
-    return [product_type.dict() for product_type in product_types]
+    print(f"[PRODUCTS]: {products}")
+    return [product.dict() for product in products]
 
 
 @router.get("/{id}", response_model=ProductSchemaOut)
 async def get_one(id:str):
-    product_type_service = ProductService(ProductRepository)
-    product_type = await product_type_service.get_one(id)
-    print(f"[PRODUCT][RECORD]: {product_type.dict()}")
-    return product_type.dict()
+    product_service = ProductService(ProductRepository)
+    product = await product_service.get_one(id)
+    print(f"[PRODUCT][RECORD]: {product.dict()}")
+    return product.dict()
 
 
 @router.post("/", response_model=ProductSchemaOut, status_code=status.HTTP_201_CREATED)

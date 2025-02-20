@@ -29,7 +29,6 @@ class MediaObject(BaseModel):
             self.thumbnail.alt = (self.image.alt + " [thumbnail]"
                                 if self.image.alt is not None
                                 else "[thumbnail]")
-
     def dict(self):
         return self.model_dump()
 

@@ -3,8 +3,8 @@ from typing import Annotated,Optional
 from pydantic import BaseModel, Field, BeforeValidator
 
 
-
 DecimalType = Annotated[Decimal, BeforeValidator(lambda x: Decimal(str(x)))]
+
 
 class Stock(BaseModel):
     iventory_id: str
@@ -23,11 +23,15 @@ class VariantSchema(BaseModel):
     sku: str
     product: str
     attributes_selection: dict
-    channels: list[str]
     main_media: Optional[str] = None
     media_gallery: Optional[list[str]] = Field(default_factory=list)
     stock: list[Stock]
     price: list[Price]
+    
+    def model_post_init(self, __context) -> None:
+        self.media_gallery = (list(set(self.media_gallery)) 
+                            if self.media_gallery is not None 
+                            else []) 
     
     def dict(self):
         return self.model_dump()
@@ -46,7 +50,7 @@ class VariantSchemaUpdate(VariantSchema):
     sku: Optional[str] = None
     product: Optional[str] = None
     attributes_selection: Optional[dict] = None
-    channels: Optional[list[str]] = None
+    media_gallery: Optional[list[str]] = None
     stock: Optional[list[Stock]] = None
     price: Optional[list[Price]] = None
     

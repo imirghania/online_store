@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass, field
+from decimal import Decimal
 from typing import Optional, Protocol
 
 
@@ -92,27 +93,28 @@ class Product(BaseDomain):
     media_gallery: Optional[list[str]] = None
 
 
-# @dataclass
-# class Variant:
-#     """docstring for Variant."""
-#     name: str
-#     slug: str
-#     sku: str
-#     product: Product
-#     attributes_selection: dict
-#     price: list[Price]
-#     media: Optional[Media] = None
-#     stock: Optional[list[Stock]] = field(default_factory=list)
+@dataclass
+class Stock:
+    iventory_id: str
+    quantity: Optional[int] = 0
 
-#     def dict(self):
-#         return {
-#             "id": self.id,
-#             "name": self.name,
-#             "slug": self.slug,
-#             "sku": self.sku,
-#             "product": self.product.dict(),
-#             "attributes_selection": self.attributes_selection,
-#             "media": self.media.model_dump(),
-#             "stock": self.stock.model_dump(),
-#             "price": self.price.model_dump(),
-#         }
+
+@dataclass
+class Price:
+    channel_id: str
+    currency: str
+    amount: Decimal
+    amount_discounted: Optional[Decimal] = 0.00
+
+
+@dataclass
+class Variant(BaseDomain):
+    """docstring for Variant."""
+    name: str
+    sku: str
+    product: Product
+    attributes_selection: dict
+    main_media: Optional[str]
+    media_gallery: Optional[list[str]]
+    price: list[Price]
+    stock: Optional[list[Stock]] = field(default_factory=list)
