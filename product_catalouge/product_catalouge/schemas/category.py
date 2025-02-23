@@ -11,17 +11,22 @@ class CategoryBaseSchema(BaseModel):
         return self.model_dump()
 
 
-class CategorySchemaIn(CategoryBaseSchema):
+class CategorySchema(CategoryBaseSchema):
     parent: Optional[str] = None
     sub_categories: Optional[list[str]] = Field(default_factory=list)
 
 
-class CategorySchema(CategorySchemaIn):
+class CategorySchemaIn(CategorySchema):
     ...
 
 
-class CategorySchemaOut(CategorySchema):
+class CategorySchemaOut(CategoryBaseSchema):
     id: str
+
+
+class CategorySchemaOutShort(CategoryBaseSchema):
+    id: str
+    slug: str = Field(exclude=True)
 
 
 class CategoryUpdateSchema(CategorySchema):

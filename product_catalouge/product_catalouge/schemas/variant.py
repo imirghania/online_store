@@ -1,6 +1,8 @@
 from decimal import Decimal
 from typing import Annotated,Optional
 from pydantic import BaseModel, Field, BeforeValidator
+from .product import ProductSchemaOutDetailedShort
+from .media import MediaObjectOut, MediaObjectIn
 
 
 DecimalType = Annotated[Decimal, BeforeValidator(lambda x: Decimal(str(x)))]
@@ -56,3 +58,13 @@ class VariantSchemaUpdate(VariantSchema):
     
     def dict(self):
         return self.model_dump(exclude_unset=True)
+
+
+
+class VariantSchemaOutDetailed(VariantSchemaOut):
+    product: ProductSchemaOutDetailedShort
+    main_media: Optional[MediaObjectIn] = None
+    media_gallery: Optional[list[MediaObjectIn]] = Field(default_factory=list)
+    
+    def model_post_init(self, __context) -> None:
+        ... 

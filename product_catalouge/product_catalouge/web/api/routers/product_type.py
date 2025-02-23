@@ -28,7 +28,9 @@ async def get_one(id:str):
     return product_type.dict()
 
 
-@router.get("/{id}/verbose", response_model=ProductTypeSchemaOutDetailed)
+@router.get("/{id}/verbose", 
+            response_model=ProductTypeSchemaOutDetailed,
+            response_model_exclude_none=True)
 async def get_one_with_details(id:str):
     product_type_service = ProductTypeService(ProductTypeRepository)
     product_type = await product_type_service.get_one_verbose(id)

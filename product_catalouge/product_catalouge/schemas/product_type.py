@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-from .attribute import AttributeSchemaIn
+from .attribute import AttributeSchemaIn, AttributeSchemaNoInternalCode
 
 
 
@@ -41,3 +41,9 @@ class ProductTypeSchemaOutDetailed(ProductTypeSchemaOut):
     
     def model_post_init(self, __context) -> None:
         ...
+
+
+class ProductTypeSchemaOutNoInternalCode(ProductTypeSchemaOutDetailed):
+    general_attributes: Optional[list[AttributeSchemaNoInternalCode]]
+    variant_attributes: Optional[list[AttributeSchemaNoInternalCode]]
+    

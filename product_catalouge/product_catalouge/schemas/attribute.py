@@ -41,3 +41,7 @@ class AttributeUpdateSchema(AttributeSchema):
     
     def dict(self):
         return self.model_dump(exclude_unset=True)
+
+
+class AttributeSchemaNoInternalCode(AttributeSchema):
+    internal_code: str = Field(exclude=True)

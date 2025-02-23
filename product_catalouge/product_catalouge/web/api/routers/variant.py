@@ -4,7 +4,7 @@ from repository.variant_repository import VariantRepository
 from product_catalouge.service.variant_service import VariantService
 from product_catalouge.service.unit_of_work import UnitOfWork
 from product_catalouge.schemas.variant import (
-    VariantSchemaIn, VariantSchemaOut, VariantSchemaUpdate)
+    VariantSchemaIn, VariantSchemaOut, VariantSchemaUpdate, VariantSchemaOutDetailed)
 
 
 router = APIRouter(prefix="/api/variant", tags=["Variant"])
@@ -35,6 +35,16 @@ async def create_variant(payload:VariantSchemaIn):
         uow.track(record)
         await uow.commit()
         return variant.dict()
+
+
+@router.get("/{id}/verbose", 
+            response_model=VariantSchemaOutDetailed,
+            response_model_exclude_none=True)
+async def get_one_verbose(id:str):
+    variant_service = VariantService(VariantRepository)
+    variant = await variant_service.get_one_verbose(id)
+    print(f"[VARIANT][RECORD]: {variant.dict()}")
+    return variant.dict()
 
 
 # @router.patch("/{id}", response_model=VariantSchemaOut)

@@ -1,7 +1,6 @@
-from typing import Any
+from typing import Any, Callable, Optional
 from beanie import PydanticObjectId
 from schemas.category import CategorySchemaIn
-# from product_catalouge.repository.base_repository import Repository
 from product_catalouge.repository.category_repository import CategoryRepository
 from .base_service import Service
 from .domain import Category
@@ -11,6 +10,7 @@ class CategoryService(Service):
     model_label = "Category"
     def __init__(self, repository: CategoryRepository):
         super().__init__(repository, Category)
+
 
     async def create(self, payload: CategorySchemaIn) -> tuple[Category, Any]:
         category, record = await super().create(payload)
@@ -23,6 +23,7 @@ class CategoryService(Service):
         if parent is not None:
             parent.sub_categories.append(str(category.id))
         return category, record, parent
+
 
     async def delete_one(self, id:PydanticObjectId):
         objects_to_track = []

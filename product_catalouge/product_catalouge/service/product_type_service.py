@@ -13,8 +13,11 @@ from .domain import ProductType
 
 
 class ProductTypeService(Service):
+    
     model_label = "ProductType"
     attribute_service = AttributeService(AttributeRepository)
+    
+    
     def __init__(self, repository: ProductTypeRepository):
         super().__init__(repository, ProductType)
     

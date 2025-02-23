@@ -1,14 +1,12 @@
-from product_catalouge.repository.product_repository import(
-    ProductRepository)
-from product_catalouge.service.product_type_service import product_type_service
-from product_catalouge.service.media_service import media_service
-from product_catalouge.service.categories_service import categories_service
-from exceptions.database_exceptions import InvalidInputError
-from beanie import PydanticObjectId
 from typing import Literal
+from beanie import PydanticObjectId
+from exceptions.database_exceptions import InvalidInputError
+from product_catalouge.repository.product_repository import ProductRepository
+from product_catalouge.service.categories_service import categories_service
+from product_catalouge.service.media_service import media_service
+from product_catalouge.service.product_type_service import product_type_service
 from .base_service import Service
 from .domain import Product
-
 
 
 class ProductService(Service):
@@ -82,3 +80,6 @@ class ProductService(Service):
         return updated_product, product_record
 
 
+
+
+product_service = ProductService(ProductRepository)
