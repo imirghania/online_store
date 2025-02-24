@@ -20,7 +20,7 @@ class CategorySchemaIn(CategorySchema):
     ...
 
 
-class CategorySchemaOut(CategoryBaseSchema):
+class CategorySchemaOut(CategorySchemaIn):
     id: str
 
 
